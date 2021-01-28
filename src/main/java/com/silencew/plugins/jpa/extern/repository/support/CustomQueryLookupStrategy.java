@@ -67,11 +67,11 @@ public class CustomQueryLookupStrategy implements QueryLookupStrategy {
             if (grt instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType) grt;
                 Type ata = pt.getActualTypeArguments()[0];
-                if(!(ata instanceof ParameterizedType)) {
+                if (!(ata instanceof ParameterizedType)) {
                     Class<?> argument = (Class<?>) ata;
                     if (!domainType.isAssignableFrom(argument)) {
                         boolean assignableFrom = Map.class.isAssignableFrom(argument);
-                        if(!assignableFrom){
+                        if (!assignableFrom) {
                             return true;
                         }
                     }
