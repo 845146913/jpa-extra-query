@@ -3,7 +3,6 @@ package com.silencew.plugins.jpa.extern.repository.query;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
-import tech.rongxin.oryx.utils.ReflectionUtil;
 
 import javax.persistence.Query;
 import java.lang.reflect.Field;
@@ -60,7 +59,7 @@ public class JpaQueryUtils {
         for (Field field : fields) {
             try {
                 String name = field.getName();
-                Object value = ReflectionUtil.getValueByFieldName(object, name);
+                Object value = getField(field, object);
                 if (value != null) {
                     if (dynamicSql.toString().matches(match)) {
                         whereOrAnd = " AND ";
@@ -72,6 +71,18 @@ public class JpaQueryUtils {
             } catch (IllegalAccessException e) {
             }
         }
+    }
+
+    private static Object getField(Field field, Object object) throws IllegalAccessException {
+        Object value;
+        if (field.isAccessible()) {
+            value = field.get(object);
+        } else {
+            field.setAccessible(true);
+            value = field.get(object);
+            field.setAccessible(false);
+        }
+        return value;
     }
 
     private static void wrapForSearchFilters(List<CriterionFilter> object, StringBuilder dynamicSql, String alias, String whereOrAnd, String match) {
@@ -217,7 +228,7 @@ public class JpaQueryUtils {
             for (Field field : fields) {
                 try {
                     String name = field.getName();
-                    Object value = ReflectionUtil.getValueByFieldName(object, name);
+                    Object value = getField(field, object);
                     if (value != null) {
                         query.setParameter(name, value);
                     }

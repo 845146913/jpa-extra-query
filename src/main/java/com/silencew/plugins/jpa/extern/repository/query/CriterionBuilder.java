@@ -8,10 +8,8 @@ import java.util.Arrays;
  * @Author: wang
  * @Date: 2020/3/19 9:47
  */
-public class ConditionCreator {
+public interface CriterionBuilder {
 
-    private ConditionCreator() {
-    }
 
     /**
      * 等于
@@ -20,7 +18,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter eq(String fieldName, Object value) {
+    static SearchFilter eq(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.EQ, value);
     }
 
@@ -31,7 +29,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter ne(String fieldName, Object value) {
+    static SearchFilter ne(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.NE, value);
     }
 
@@ -42,7 +40,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter like(String fieldName, Object value) {
+    static SearchFilter like(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.LIKE, value + "%");
     }
 
@@ -53,7 +51,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter likeAll(String fieldName, Object value) {
+    static SearchFilter likeAll(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.LIKE, "%" + value + "%");
     }
 
@@ -64,7 +62,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter gt(String fieldName, Object value) {
+    static SearchFilter gt(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.GT, value);
     }
 
@@ -75,7 +73,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter gte(String fieldName, Object value) {
+    static SearchFilter gte(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.GTE, value);
     }
 
@@ -86,7 +84,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter lt(String fieldName, Object value) {
+    static SearchFilter lt(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.LT, value);
     }
 
@@ -97,7 +95,7 @@ public class ConditionCreator {
      * @param value
      * @return
      */
-    public static SearchFilter lte(String fieldName, Object value) {
+    static SearchFilter lte(String fieldName, Object value) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.LTE, value);
     }
 
@@ -109,7 +107,7 @@ public class ConditionCreator {
      * @param y
      * @return
      */
-    public static SearchFilter between(String fieldName, Object x, Object y) {
+    static SearchFilter between(String fieldName, Object x, Object y) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.BETWEEN, Arrays.asList(x, y));
     }
 
@@ -120,7 +118,7 @@ public class ConditionCreator {
      * @param values
      * @return
      */
-    public static SearchFilter in(String fieldName, Object... values) {
+    static SearchFilter in(String fieldName, Object... values) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.IN, Arrays.asList(values));
     }
 
@@ -131,7 +129,7 @@ public class ConditionCreator {
      * @param values
      * @return
      */
-    public static SearchFilter notIn(String fieldName, Object... values) {
+    static SearchFilter notIn(String fieldName, Object... values) {
         return new SearchFilter(fieldName, CriterionFilter.Operator.NOTIN, Arrays.asList(values));
     }
 
@@ -141,7 +139,7 @@ public class ConditionCreator {
      * @param filters
      * @return
      */
-    public static LogicSearchFilter and(CriterionFilter... filters) {
+    static LogicSearchFilter and(CriterionFilter... filters) {
         return new LogicSearchFilter(CriterionFilter.Operator.AND, filters);
     }
 
@@ -151,7 +149,7 @@ public class ConditionCreator {
      * @param filters
      * @return
      */
-    public static LogicSearchFilter or(CriterionFilter... filters) {
+    static LogicSearchFilter or(CriterionFilter... filters) {
         return new LogicSearchFilter(CriterionFilter.Operator.OR, filters);
     }
 }
