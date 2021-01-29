@@ -1,4 +1,4 @@
-package com.silencew.plugins.jpa.extern.repository.query;
+package com.silencew.plugins.jpa.extra.repository.query;
 
 /**
  * 处理除AND、OR以外的Operator条件

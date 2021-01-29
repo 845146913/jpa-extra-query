@@ -1,7 +1,7 @@
-package com.silencew.plugins.jpa.extern.repository.support;
+package com.silencew.plugins.jpa.extra.repository.support;
 
-import com.silencew.plugins.jpa.extern.repository.GenericRepository;
-import com.silencew.plugins.jpa.extern.repository.query.CriterionFilter;
+import com.silencew.plugins.jpa.extra.repository.GenericRepository;
+import com.silencew.plugins.jpa.extra.repository.query.CriterionFilter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 

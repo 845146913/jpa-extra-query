@@ -1,4 +1,4 @@
-package com.silencew.plugins.jpa.extern.repository.support;
+package com.silencew.plugins.jpa.extra.repository.support;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;

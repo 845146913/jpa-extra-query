@@ -1,4 +1,4 @@
-package com.silencew.plugins.jpa.extern.converter;
+package com.silencew.plugins.jpa.extra.converter;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.convert.TypeDescriptor;

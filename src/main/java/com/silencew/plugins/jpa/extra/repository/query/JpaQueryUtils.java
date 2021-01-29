@@ -1,4 +1,4 @@
-package com.silencew.plugins.jpa.extern.repository.query;
+package com.silencew.plugins.jpa.extra.repository.query;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

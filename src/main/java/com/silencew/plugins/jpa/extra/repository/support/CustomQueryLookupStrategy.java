@@ -1,6 +1,6 @@
-package com.silencew.plugins.jpa.extern.repository.support;
+package com.silencew.plugins.jpa.extra.repository.support;
 
-import com.silencew.plugins.jpa.extern.converter.MapToEntityConverter;
+import com.silencew.plugins.jpa.extra.converter.MapToEntityConverter;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.data.jpa.provider.PersistenceProvider;
 import org.springframework.data.jpa.provider.QueryExtractor;
