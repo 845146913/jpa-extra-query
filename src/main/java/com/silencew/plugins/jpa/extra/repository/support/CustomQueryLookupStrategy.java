@@ -1,14 +1,13 @@
 package com.silencew.plugins.jpa.extra.repository.support;
 
 import com.silencew.plugins.jpa.extra.converter.MapToEntityConverter;
+import com.silencew.plugins.jpa.extra.repository.query.CriterionFilter;
 import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.provider.PersistenceProvider;
 import org.springframework.data.jpa.provider.QueryExtractor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.query.DefaultJpaQueryMethodFactory;
-import org.springframework.data.jpa.repository.query.EscapeCharacter;
-import org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy;
-import org.springframework.data.jpa.repository.query.JpaQueryMethodFactory;
+import org.springframework.data.jpa.repository.query.*;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -23,12 +22,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class CustomQueryLookupStrategy implements QueryLookupStrategy {
     private final EntityManager em;
     private QueryLookupStrategy queryLookupStrategy;
     private final QueryExtractor extractor;
     private EscapeCharacter escapeCharacter = EscapeCharacter.DEFAULT;
+    private JpaQueryMethodFactory factory;
 
     public CustomQueryLookupStrategy(EntityManager em,
 //                                     JpaQueryMethodFactory factory,
@@ -36,7 +37,7 @@ public class CustomQueryLookupStrategy implements QueryLookupStrategy {
         Assert.notNull(em, "EntityManager must not be null!");
         this.em = em;
         this.extractor = extractor;
-        JpaQueryMethodFactory factory = new DefaultJpaQueryMethodFactory(extractor);
+        this.factory = new DefaultJpaQueryMethodFactory(extractor);
         this.queryLookupStrategy = JpaQueryLookupStrategy.create(em, factory, key, evaluationContextProvider,
                 escapeCharacter);
     }
@@ -51,9 +52,18 @@ public class CustomQueryLookupStrategy implements QueryLookupStrategy {
     public RepositoryQuery resolveQuery(Method method, RepositoryMetadata repositoryMetadata, ProjectionFactory projectionFactory, NamedQueries namedQueries) {
         Query query = method.getAnnotation(Query.class);
         if (query != null) {
-            if (needConvert(method, repositoryMetadata)) {
+            if (!query.nativeQuery() && needConvert(method, repositoryMetadata)) {
                 DefaultConversionService sharedInstance = (DefaultConversionService) DefaultConversionService.getSharedInstance();
                 sharedInstance.addConverter(new MapToEntityConverter());
+            }
+            boolean anyMatch = Stream.of(method.getParameterTypes())
+                    .anyMatch(x -> x.isAssignableFrom(Specification.class) ||
+                            Iterable.class.isAssignableFrom(x) ?
+                            ((Class<?>)((ParameterizedType)x.getGenericInterfaces()[0]).getActualTypeArguments()[0]).isAssignableFrom(CriterionFilter.class)
+                            : false
+                            );
+            if (query.nativeQuery() || anyMatch) {
+                return new CriterionJpaQuery(factory.build(method, repositoryMetadata, projectionFactory), em);
             }
         }
         return queryLookupStrategy.resolveQuery(method, repositoryMetadata, projectionFactory, namedQueries);

@@ -4,6 +4,7 @@ import com.silencew.plugins.jpa.extra.repository.query.CriterionFilter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -17,5 +18,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface GenericRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
 
+    @Query
     <DTO> List<DTO> findAll(List<CriterionFilter> dynamicFilter, Pageable pageable);
 }
