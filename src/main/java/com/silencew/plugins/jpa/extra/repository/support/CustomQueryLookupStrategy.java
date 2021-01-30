@@ -58,9 +58,9 @@ public class CustomQueryLookupStrategy implements QueryLookupStrategy {
             }
             boolean anyMatch = Stream.of(method.getParameterTypes())
                     .anyMatch(x -> x.isAssignableFrom(Specification.class) ||
-                            Iterable.class.isAssignableFrom(x) ?
+                            (Iterable.class.isAssignableFrom(x) ?
                             ((Class<?>)((ParameterizedType)x.getGenericInterfaces()[0]).getActualTypeArguments()[0]).isAssignableFrom(CriterionFilter.class)
-                            : false
+                            : false)
                             );
             if (query.nativeQuery() || anyMatch) {
                 return new CriterionJpaQuery(factory.build(method, repositoryMetadata, projectionFactory), em);
